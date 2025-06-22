@@ -1,13 +1,61 @@
-# Ignore Python junk
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# Node.js
-node_modules/
+# C extensions
+*.so
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+.pyenv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VSCode project settings
+.vscode/
+
+# IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
 
 # Logs
 *.log
 
-# VSCode settings
-.vscode/
+# OS files
+.DS_Store
+Thumbs.db
 
+# dotenv files
+.env
+.env.*
