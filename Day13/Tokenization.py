@@ -1,7 +1,6 @@
-import nltk
-nltk.download('punkt')
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import TreebankWordTokenizer
 
+tokenizer = TreebankWordTokenizer()
 text = "AI is transforming the world!"
-tokens = word_tokenize(text)
+tokens = tokenizer.tokenize(text)
 print(tokens)
