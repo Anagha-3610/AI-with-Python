@@ -240,7 +240,7 @@ def predict_intent(user_input):
     input_vector=vectorizer.transform([sentence])
     prediction=model.predict(input_vector)[0]
     return prediction
-
+    
 def get_response(intent_tag):
     for intent_data in intents:
         if intent_data['tag'] == intent_tag:
@@ -248,18 +248,82 @@ def get_response(intent_tag):
     for intent_data in intents:
         if intent_data['tag'] == 'noanswer':
             return random.choice(intent_data['responses'])
-
+        
 print("\n\nChatBot is running! You can stop the bot by typing 'quit'.\n\n")
-while True:
-    user_input=input("You: ")
-    if user_input.lower()=='quit':
-        print("Bot: Goodbye! Hope to see you soon and have more fun!")
-        break
-    elif user_input.lower()=='stop':
-        print("Bot: Goodbye! Hope to see you soon and have more fun!")
-        break
-    elif user_input.lower()=='help':
-        print("Bot: How can help you? I am ready to assist you")
-    intent= predict_intent(user_input)
-    response=get_response(intent)
-    print("Bot: ",response)
+# while True:
+#     user_input=input("You: ")
+#     if user_input.lower()=='quit':
+#         print("Bot: Goodbye! Hope to see you soon and have more fun!")
+#         break
+#     elif user_input.lower()=='stop':
+#         print("Bot: Goodbye! Hope to see you soon and have more fun!")
+#         break
+#     elif user_input.lower()=='help':
+#         print("Bot: How can help you? I am ready to assist you")
+#     intent= predict_intent(user_input)
+#     response=get_response(intent)
+#     print("Bot: ",response)
+
+import tkinter as tk
+from tkinter import scrolledtext
+
+def send_message():
+    user_input = entry.get()
+    if user_input.strip() == "":
+        return
+    
+    chat_area.config(state=tk.NORMAL)
+    chat_area.insert(tk.END, f"You: {user_input}\n", "user")
+    entry.delete(0, tk.END)
+
+    user_lower = user_input.lower().strip()
+    
+    # Handling special commands
+    if user_lower == "quit" or user_lower == "stop":
+        response = "Goodbye! Hope to see you soon and have more fun!"
+        chat_area.insert(tk.END, f"Bot: {response}\n", "bot")
+        chat_area.config(state=tk.DISABLED)
+        root.after(2000, root.destroy)  # Close the window after 1 second
+        return
+    elif user_lower == "help":
+        response = "How can I help you? I am ready to assist you."
+    else:
+        intent = predict_intent(user_input)
+        response = get_response(intent)
+    
+    chat_area.insert(tk.END, f"Bot: {response}\n", "bot")
+    chat_area.config(state=tk.DISABLED)
+    chat_area.yview(tk.END)
+
+
+BG_COLOR = "#008d9d"
+TEXT_COLOR = "#530071"
+BUTTON_COLOR = "#530071"
+ENTRY_BG = "#dce0e5"
+BOT_COLOR = "#033256"
+USER_COLOR = "#03561C"
+
+root = tk.Tk()
+root.title("💬 NLP ChatBot")
+root.geometry("520x600")
+root.configure(bg=BG_COLOR)
+root.resizable(False, False)
+
+chat_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=25, font=("Segoe UI", 12,"bold"))
+chat_area.pack(padx=10, pady=10)
+chat_area.configure(bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground=TEXT_COLOR)
+chat_area.tag_config("bot", foreground=BOT_COLOR)
+chat_area.tag_config("user", foreground=USER_COLOR)
+
+entry_frame = tk.Frame(root, bg=BG_COLOR)
+entry_frame.pack(pady=10)
+
+entry = tk.Entry(entry_frame, font=("Segoe UI", 12), width=45, bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground=TEXT_COLOR, relief="flat")
+entry.pack(side=tk.LEFT, padx=(10, 5), ipady=8)
+
+send_button = tk.Button(entry_frame, text="Send", command=send_message, bg=BUTTON_COLOR, fg="white", font=("Segoe UI", 10, "bold"), padx=10, pady=6, relief="flat", activebackground="#a7cde7")
+send_button.pack(side=tk.LEFT, padx=(5, 10))
+
+entry.bind("<Return>", lambda event: send_message())
+
+root.mainloop()
